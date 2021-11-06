@@ -6,8 +6,13 @@
 //
 
 import UIKit
+import AVFoundation
+
 
 class ViewController: UIViewController {
+   
+    var resultAudioPlayer: AVAudioPlayer = AVAudioPlayer()
+    
     @IBOutlet weak var stickView: UIView!
     @IBOutlet weak var stickLabel: UILabel!
     @IBOutlet weak var stickHight: NSLayoutConstraint!
@@ -28,6 +33,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSound()
      
     }
 
@@ -49,11 +55,19 @@ class ViewController: UIViewController {
                }, completion: { (finished: Bool) in
                    self.bigLabel.text = self.stickLabel.text
                    self.overView.isHidden = false
+                   self.resultAudioPlayer.play()
            })
     }
     
     @IBAction func tapRetryButton(_ sender: Any) {
         overView.isHidden = true
         stickBottomMargin.constant = 0
+    }
+    
+    func setupSound(){
+        if let sound = Bundle.main.path(forResource: "drum", ofType: ".mp3") {
+            resultAudioPlayer = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound))
+            resultAudioPlayer.prepareToPlay()
+        }
     }
 }
